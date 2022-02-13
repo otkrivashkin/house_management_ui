@@ -1,0 +1,146 @@
+<h2 mat-dialog-title>{{form && form.value.id ? 'Update house' : 'Create house'}}</h2>
+<mat-dialog-content [formGroup]="form">
+  <input formControlName="id" style="display: none">
+  <div formArrayName="images">
+    <input type="file" (change)="onFileChanged($event)" #fileUpload style="display: none">
+    <mat-icon (click)="fileUpload.click()" style="font-size: 100px; cursor: pointer">add_photo_alternate</mat-icon>
+    <div class="images">
+      <div *ngFor="let image of images.controls; let i = index">
+        <div [formGroupName]="i">
+          <div style="position: relative; width: 100px; height: 100px">
+            <button style="position: absolute; top: 5px; right: 5px; cursor: pointer"
+              (click)="removeImage(i)"
+              mat-mini-fab aria-label="Example icon button with a home icon">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <div>
+              <img [src]="image.value.data" width="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Agent</mat-label>
+      <mat-select formControlName="agentId">
+        <mat-option *ngFor="let agent of agents" [value]="agent.id">{{agent.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <mat-label>Client</mat-label>
+      <mat-select formControlName="clientId">
+        <mat-option *ngFor="let client of clients" [value]="client.id">{{client.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Listing</mat-label>
+      <mat-select formControlName="listing">
+        <mat-option *ngFor="let listing of listings | enumToArray" [value]="listing">{{listing | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <mat-label>House Type</mat-label>
+      <mat-select formControlName="houseType">
+        <mat-option *ngFor="let houseType of houseTypes | enumToArray" [value]="houseType">{{houseType | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Bathrooms</mat-label>
+      <mat-select formControlName="bathroomCount">
+        <mat-option *ngFor="let bathroomCount of bathroomCounts | enumToArray" [value]="bathroomCount">{{bathroomCount | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <mat-label>Bedrooms</mat-label>
+      <mat-select formControlName="bedRoomCount">
+        <mat-option *ngFor="let bedRoomCount of bedroomCounts | enumToArray" [value]="bedRoomCount">{{bedRoomCount | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Total rooms</mat-label>
+      <mat-select formControlName="totalRoomCount">
+        <mat-option *ngFor="let totalRoomCount of totalRoomCounts | enumToArray" [value]="totalRoomCount">{{totalRoomCount | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <mat-label>Parking spots</mat-label>
+      <mat-select formControlName="parkingSpotCount">
+        <mat-option *ngFor="let parkingSpotCount of parkingSpotCounts | enumToArray" [value]="parkingSpotCount">{{parkingSpotCount | titlecase}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Living area"
+        formControlName="livingArea">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="col-6">
+      <mat-label>Choose a built date</mat-label>
+      <input formControlName="createdAt" matInput [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Address"
+        formControlName="address">
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Price"
+        formControlName="price">
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="example-full-width col-12" appearance="fill">
+      <mat-label>Leave a comment</mat-label>
+      <textarea matInput placeholder="Ex. It makes me feel..." formControlName="comments"></textarea>
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <mat-form-field>
+        <mat-label>Features</mat-label>
+        <mat-select (selectionChange)="selectionFeatureChange($event)">
+          <mat-option *ngFor="let feature of availableFeatures" [value]="feature">{{feature.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <button class="mat-raised-button" (click)="addFeature()">Add Feature</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="col-12" formArrayName="features">
+        <mat-chip-list aria-label="Feature selection">
+          <ng-container *ngFor="let feature of features.controls; let i = index">
+            <ng-container [formGroupName]="i">
+              <mat-chip (removed)="removeFeature(i)">
+                {{feature.value.description}}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </ng-container>
+          </ng-container>
+        </mat-chip-list>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-between">
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

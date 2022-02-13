@@ -1,0 +1,8 @@
+export enum Listing {
+  RENT = 'RENT',
+  SALE = 'SALE',
+  SOLD = 'SOLD',
+  RENTED = 'RENTED',
+  FOR_APPRECIATION = 'FOR_APPRECIATION',
+  RESERVED = 'RESERVED'
+}

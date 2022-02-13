@@ -1,0 +1,121 @@
+<h2 mat-dialog-title>{{form && form.value.id ? 'Update user' : 'Create user'}}</h2>
+<mat-dialog-content [formGroup]="form">
+
+  <input formControlName="id" style="display: none">
+
+  <div class="row">
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Name"
+        formControlName="name">
+    </mat-form-field>
+      <mat-form-field class="col-6">
+        <input matInput
+          placeholder="Email"
+          formControlName="email">
+      </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Gender</mat-label>
+      <mat-select [value]="'MALE'" formControlName="gender">
+        <mat-option [value]="'MALE'">Male</mat-option>
+        <mat-option [value]="'FEMALE'">Female</mat-option>
+        <mat-option [value]="'UNDEFINED'">Undefined</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Phone number"
+        formControlName="phoneNumber">
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <mat-form-field class="col-6">
+      <input matInput
+        placeholder="Address"
+        formControlName="address">
+    </mat-form-field>
+    <mat-form-field class="col-6">
+      <input matInput
+        type="password"
+        placeholder="password"
+        formControlName="password">
+    </mat-form-field>
+  </div>
+  <div class="row">
+    <mat-form-field class="col-6">
+      <mat-label>Position</mat-label>
+      <mat-select formControlName="position">
+        <mat-option [value]="'ADMIN'">Admin</mat-option>
+        <mat-option [value]="'AGENT'">Agent</mat-option>
+        <mat-option [value]="'CLIENT'">Client</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="col-6">
+      <input type="file" (change)="onFileChanged($event)" #fileUpload style="display: none">
+      <mat-icon (click)="fileUpload.click()" *ngIf="!imgUrl" style="font-size: 155px; cursor: pointer">add_photo_alternate</mat-icon>
+      <div *ngIf="imgUrl">
+        <img [src]="imgUrl" width="155" style="cursor: pointer" (click)="fileUpload.click()">
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="'AGENT' === form.value.position">
+    <div class="row">
+      <div class="col-8">
+        <mat-form-field>
+          <mat-label>Skills</mat-label>
+          <mat-select (selectionChange)="selectionSkillChange($event)">
+            <mat-option *ngFor="let skill of availableSkills" [value]="skill">{{skill.description}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-4">
+        <button class="mat-raised-button" (click)="addSkill()">Add Skill</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="col-12" formArrayName="skills">
+          <mat-chip-list aria-label="Skill selection">
+            <ng-container *ngFor="let skill of skills.controls; let i = index">
+              <ng-container [formGroupName]="i">
+                <mat-chip (removed)="removeSkill(i)">
+                  {{skill.value.description}}
+                  <button matChipRemove>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+              </ng-container>
+            </ng-container>
+          </mat-chip-list>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="row">
+    <ng-container *ngIf="'CLIENT' === form.value.position" >
+      <mat-form-field class="col-6">
+        <mat-label>Agent</mat-label>
+        <mat-select formControlName="agentId">
+          <mat-option *ngFor="let agent of agents" [value]="agent.id">{{agent.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+
+    <mat-form-field  class="example-full-width pt-2" [ngClass]="{'col-6': 'CLIENT' === form.value.position, 'col-12': 'CLIENT' !== form.value.position}" appearance="fill">
+      <mat-label>Leave a description</mat-label>
+      <textarea matInput placeholder="Ex. It makes me feel..." formControlName="description"></textarea>
+    </mat-form-field>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions class="d-flex justify-content-between">
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="submit()">Save</button>
+</mat-dialog-actions>

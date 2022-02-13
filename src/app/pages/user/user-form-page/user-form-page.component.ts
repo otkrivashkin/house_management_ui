@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validator, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -28,6 +28,18 @@ export class UserFormPageComponent implements OnInit {
     return this.form.controls['skills'] as FormArray;
   }
 
+  get email() {
+    return this.form.controls['email'];
+  }
+
+  get password() {
+    return this.form.controls['password'];
+  }
+
+  get name() {
+    return this.form.controls['name'];
+  }
+
   constructor(private fb: FormBuilder,
               private userService: UserService,
               private imageService: ImageService,
@@ -52,12 +64,12 @@ export class UserFormPageComponent implements OnInit {
 
     const form = this.fb.group({
       id: [],
-      name: [],
-      email: [],
+      name: [null, [Validators.required, Validators.minLength(4)]],
+      email: [null, [Validators.email, Validators.required]],
       gender: [],
       phoneNumber: [],
       address: [],
-      password: [],
+      password: [null, [Validators.required, Validators.minLength(4)]],
       position: [],
       agentId: [],
       description: [],

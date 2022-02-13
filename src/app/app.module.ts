@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { BaseLayoutComponent } from './components/base-layout/base-layout.component';
-import { DashboardPageComponent } from './pages/dashboard/dashboard-page.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -34,12 +33,14 @@ import { HouseFeatureFormPageComponent } from './pages/house-feature/house-featu
 import { EnumToArrayPipe } from './pipes/enum-to-array.pipe';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthPageComponent } from './pages/auth-page/auth-page.component';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
+    AuthPageComponent,
     AppComponent,
     BaseLayoutComponent,
-    DashboardPageComponent,
     NotFoundPageComponent,
     SidebarComponent,
     HeaderComponent,
@@ -73,6 +74,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSelectModule,
     MatTableModule,
     MatChipsModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { environment } from '../../environments/environment';
+import { Position } from '../consts/position';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { environment } from '../../environments/environment';
 export class UserService {
 
   private apiUrl = `${environment.apiUrl}/users`;
+  currentPosition = Position.CLIENT;
 
   constructor(private http: HttpClient) { }
 
@@ -33,8 +35,22 @@ export class UserService {
     return this.http.delete<void>(`${this.apiUrl}/${userId}`);
   }
 
-  getAllAgents(): Observable<User[]> {
+  public getAllAgents(): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}/agents`);
+  }
+
+  public checkIfUserExists(user: User): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/login`, user);
+  }
+
+  public login(user: User): void {
+    this.currentPosition = user.position;
+    localStorage.setItem('token', JSON.stringify(user));
+  }
+
+  public signOut(): void {
+    localStorage.removeItem('token');
+
   }
 }
 

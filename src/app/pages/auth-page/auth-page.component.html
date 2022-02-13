@@ -1,0 +1,34 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first pt-2">
+      <mat-icon>face_icon</mat-icon>
+    </div>
+
+    <!-- Login Form -->
+    <div [formGroup]="form">
+        <input formControlName="email" type="text" id="login" class="fadeIn second" name="login" placeholder="login">
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+          class="alert">
+          <div *ngIf="email.errors?.['required']">
+            Email is required.
+          </div>
+        </div>
+        <input formControlName="password" type="text" id="password" class="fadeIn third" name="login" placeholder="password">
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+          class="alert">
+          <div *ngIf="password.errors?.['required']">
+            Password is required.
+          </div>
+        </div>
+      <input type="submit" [ngClass]="{'disabled': !form.valid}" class="fadeIn fourth" value="Log In" [disabled]="!form.valid" (click)="sendLoginForm()">
+    </div>
+    <ng-container *ngIf="!credentialsValid">
+      <p>Email or password is not valid</p>
+    </ng-container>
+  </div>
+
+
+</div>
